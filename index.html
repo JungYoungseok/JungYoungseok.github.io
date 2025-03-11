@@ -44,8 +44,8 @@
 <body>
     <div class="container">
         <h2>이온 퀴즈</h2>
-        <p id="question">이온명을 맞혀보세요!</p>
-        <input type="text" id="answer" placeholder="이온식을 입력하세요">
+        <p id="question">문제를 맞혀보세요!</p>
+        <input type="text" id="answer" placeholder="정답을 입력하세요" onkeypress="handleKeyPress(event)">
         <button onclick="checkAnswer()">제출</button>
         <p id="feedback"></p>
         <button onclick="nextQuestion()">다음 문제</button>
@@ -89,27 +89,45 @@
         };
 
         let keys = Object.keys(ionData);
+        let values = Object.values(ionData);
         let currentQuestion = "";
+        let currentAnswer = "";
+        let questionType = ""; // "이온명" 또는 "이온식"
 
         function nextQuestion() {
             let randomIndex = Math.floor(Math.random() * keys.length);
-            currentQuestion = keys[randomIndex];
-            document.getElementById("question").innerText = `이온명: ${currentQuestion}`;
+            let randomType = Math.random() < 0.5 ? "이온명" : "이온식";
+            
+            if (randomType === "이온명") {
+                currentQuestion = keys[randomIndex];
+                currentAnswer = ionData[currentQuestion];
+            } else {
+                currentQuestion = values[randomIndex];
+                currentAnswer = keys[randomIndex];
+            }
+            
+            questionType = randomType;
+            document.getElementById("question").innerText = `${questionType}: ${currentQuestion}`;
             document.getElementById("answer").value = "";
             document.getElementById("feedback").innerText = "";
         }
 
         function checkAnswer() {
             let userAnswer = document.getElementById("answer").value.trim();
-            let correctAnswer = ionData[currentQuestion];
             let feedback = document.getElementById("feedback");
 
-            if (userAnswer === correctAnswer) {
+            if (userAnswer === currentAnswer) {
                 feedback.innerText = "정답입니다!";
                 feedback.className = "correct";
             } else {
-                feedback.innerText = `틀렸습니다. 정답: ${correctAnswer}`;
+                feedback.innerText = `틀렸습니다. 정답: ${currentAnswer}`;
                 feedback.className = "incorrect";
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                checkAnswer();
             }
         }
 
