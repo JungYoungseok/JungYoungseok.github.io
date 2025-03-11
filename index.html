@@ -44,6 +44,7 @@
 <body>
     <div class="container">
         <h2>이온 퀴즈</h2>
+        <p id="score">점수: 0</p>
         <p id="question">문제를 맞혀보세요!</p>
         <input type="text" id="answer" placeholder="정답을 입력하세요" onkeypress="handleKeyPress(event)">
         <button onclick="checkAnswer()">제출</button>
@@ -92,9 +93,20 @@
         let values = Object.values(ionData);
         let currentQuestion = "";
         let currentAnswer = "";
-        let questionType = ""; // "이온명" 또는 "이온식"
+        let questionType = "";
+        let score = 0;
+
+        function updateScore(change) {
+            score += change;
+            document.getElementById("score").innerText = `점수: ${score}`;
+        }
 
         function nextQuestion() {
+            if (keys.length === 0) {
+                alert("모든 문제를 맞췄습니다!");
+                return;
+            }
+
             let randomIndex = Math.floor(Math.random() * keys.length);
             let randomType = Math.random() < 0.5 ? "이온명" : "이온식";
             
@@ -119,9 +131,12 @@
             if (userAnswer === currentAnswer) {
                 feedback.innerText = "정답입니다!";
                 feedback.className = "correct";
+                updateScore(5);
+                keys = keys.filter(k => k !== currentQuestion);
             } else {
                 feedback.innerText = `틀렸습니다. 정답: ${currentAnswer}`;
                 feedback.className = "incorrect";
+                updateScore(-1);
             }
         }
 
