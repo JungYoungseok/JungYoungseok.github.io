@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이온 퀴즈</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .correct {
+            color: green;
+        }
+        .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>이온 퀴즈</h2>
+        <p id="question">이온명을 맞혀보세요!</p>
+        <input type="text" id="answer" placeholder="이온식을 입력하세요">
+        <button onclick="checkAnswer()">제출</button>
+        <p id="feedback"></p>
+        <button onclick="nextQuestion()">다음 문제</button>
+    </div>
+
+    <script>
+        const ionData = {
+            "수소이온": "H+",
+            "칼슘이온": "Ca2+",
+            "수산화이온": "OH-",
+            "인산이온": "PO4 3-",
+            "철이온(II)": "Fe2+",
+            "아이오딘화이온": "I-",
+            "아세트산이온": "CH3COO-",
+            "과망가니즈산이온": "MnO4-",
+            "붕소산이온": "BO3 3-",
+            "구리이온(I)": "Cu+",
+            "하이포아염소산이온": "ClO-",
+            "탄산이온": "CO3 2-",
+            "은이온": "Ag+",
+            "황화이온": "S2-",
+            "구리이온(II)": "Cu2+",
+            "플루오린화이온": "F-",
+            "알루미늄이온": "Al3+",
+            "아연이온": "Zn2+",
+            "황산이온": "SO4 2-",
+            "바륨이온": "Ba2+",
+            "나트륨이온": "Na+",
+            "크로뮴산이온": "CrO4 2-",
+            "칼륨이온": "K+",
+            "암모늄이온": "NH4+",
+            "질산이온": "NO3-",
+            "철이온(III)": "Fe3+",
+            "염화이온": "Cl-",
+            "마그네슘이온": "Mg2+",
+            "납이온": "Pb2+",
+            "브로민화이온": "Br-",
+            "다이크로뮴산이온": "Cr2O7 2-",
+            "리튬이온": "Li+",
+            "산화이온": "O2-"
+        };
+
+        let keys = Object.keys(ionData);
+        let currentQuestion = "";
+
+        function nextQuestion() {
+            let randomIndex = Math.floor(Math.random() * keys.length);
+            currentQuestion = keys[randomIndex];
+            document.getElementById("question").innerText = `이온명: ${currentQuestion}`;
+            document.getElementById("answer").value = "";
+            document.getElementById("feedback").innerText = "";
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById("answer").value.trim();
+            let correctAnswer = ionData[currentQuestion];
+            let feedback = document.getElementById("feedback");
+
+            if (userAnswer === correctAnswer) {
+                feedback.innerText = "정답입니다!";
+                feedback.className = "correct";
+            } else {
+                feedback.innerText = `틀렸습니다. 정답: ${correctAnswer}`;
+                feedback.className = "incorrect";
+            }
+        }
+
+        window.onload = nextQuestion;
+    </script>
+</body>
+</html>
